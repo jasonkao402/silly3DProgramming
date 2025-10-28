@@ -7,6 +7,7 @@ public class player_controller : MonoBehaviour
     public targetSetter cam;
     Rigidbody rb;
     Vector2 actualMovement, targetMovement;
+    public float rotationAlpha = 0.1f;
     // base speed, sprint boost, smoothing factor
     public Vector3 walkParam = new Vector3(4f, 2.0f, 0.2f);
     public Animator animationcontroller;
@@ -30,7 +31,7 @@ public class player_controller : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (cam == null)
         {
-            cam = FindFirstObjectByType<targetSetter>();
+            cam = Camera.main.GetComponent<targetSetter>();
         }
     }
 
@@ -38,7 +39,7 @@ public class player_controller : MonoBehaviour
     void FixedUpdate()
     {
         // Handle movement input
-        transform.rotation = Quaternion.Euler(0, cam.rotationX, 0);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, cam.rotationX, 0), rotationAlpha);
         // velocity = Mathf.Lerp(velocity, isSprinting ? walkParam.y : walkParam.x, walkParam.z);
         actualMovement = Vector2.Lerp(actualMovement, targetMovement * (isSprinting ? walkParam.y : 1f), walkParam.z);
         animationcontroller.SetFloat("x_velocity", actualMovement.x);
