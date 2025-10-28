@@ -40,7 +40,6 @@ public class player_controller : MonoBehaviour
     {
         // Handle movement input
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, cam.rotationX, 0), rotationAlpha);
-        // velocity = Mathf.Lerp(velocity, isSprinting ? walkParam.y : walkParam.x, walkParam.z);
         actualMovement = Vector2.Lerp(actualMovement, targetMovement * (isSprinting ? walkParam.y : 1f), walkParam.z);
         animationcontroller.SetFloat("x_velocity", actualMovement.x);
         animationcontroller.SetFloat("z_velocity", actualMovement.y);
@@ -49,6 +48,7 @@ public class player_controller : MonoBehaviour
             Vector3 moveDirection = transform.rotation * new Vector3(actualMovement.x, 0, actualMovement.y);
             // transform.position += walkParam.x * moveDirection * Time.fixedDeltaTime;
             rb.AddForce(moveDirection * walkParam.x, ForceMode.VelocityChange);
+            rb.angularVelocity = Vector3.zero;
         }
         else
         {

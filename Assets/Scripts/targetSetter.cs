@@ -59,13 +59,6 @@ public class targetSetter : MonoBehaviour
         {
             cam = Camera.main;
         }
-        // if (playerController == null)
-        // {
-        //     playerController = FindFirstObjectByType<player_controller>();
-        // }
-        // mousePosition = playerController.mousePosition;
-        // mouseDelta = playerController.mouseDelta;
-        // scrollInput = playerController.scrollInput;
 
         rotationX = transform.rotation.eulerAngles.y;
         rotationY = transform.rotation.eulerAngles.x;
@@ -75,10 +68,6 @@ public class targetSetter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // mousePosition = playerController.mousePosition;
-        // mouseDelta = playerController.mouseDelta;
-        // scrollInput = playerController.scrollInput;
-        
         cam.fieldOfView *= 1.0f - zoomSpeed * scrollInput.y;
         cam.fieldOfView = Mathf.Clamp(cam.fieldOfView, 15.0f, 90.0f);
         if (isDragging)
