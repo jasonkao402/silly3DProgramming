@@ -37,20 +37,26 @@ public class targetSetter : MonoBehaviour
     }
     public void SetNewDestination(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if(context.ReadValueAsButton())
         {
             Ray ray = cam.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, cam.farClipPlane, layerMask))
+            {
                 targetPointer.position = hit.point;
+            }
         }
     }
     public void SetFocusedTarget(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if(context.ReadValueAsButton())
         {
             Ray ray = cam.ScreenPointToRay(mousePosition);
+            Debug.DrawRay(ray.origin, ray.direction * cam.farClipPlane, Color.red, 2.0f);
             if (Physics.Raycast(ray, out RaycastHit hit, cam.farClipPlane, layerMask))
+            {
                 focusedTarget = hit.transform;
+                Debug.Log("Focused target set to: " + focusedTarget.name);
+            }
         }
     }
     void Start()
@@ -59,7 +65,7 @@ public class targetSetter : MonoBehaviour
         {
             cam = Camera.main;
         }
-
+    
         rotationX = transform.rotation.eulerAngles.y;
         rotationY = transform.rotation.eulerAngles.x;
         originalRotation = Quaternion.identity;
