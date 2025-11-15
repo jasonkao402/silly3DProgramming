@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 
 public class objectGen : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class objectGen : MonoBehaviour
     // size of the spawn area (box) centered on this GameObject
     public Vector3 spawnAreaSize = new Vector3(10f, 1f, 10f);
     public bool parentToThis = true;
+    public NavMeshSurface navMeshSurface;
     void Start()
     {
         if (prefabs == null || prefabs.Count == 0)
@@ -40,6 +42,20 @@ public class objectGen : MonoBehaviour
             GameObject instance = Instantiate(prefab, spawnPos, rot);
             instance.transform.localScale = randomScale;
             if (parentToThis) instance.transform.parent = this.transform;
+        }
+
+        AfterInit();
+    }
+    void AfterInit()
+    {
+        // After spawning all objects, build/rebuild the NavMesh
+        if (navMeshSurface != null)
+        {
+            navMeshSurface.BuildNavMesh();
+        }
+        else
+        {
+            Debug.LogWarning("objectGen: NavMeshSurface reference is missing. Cannot build NavMesh.");
         }
     }
     // void Update()

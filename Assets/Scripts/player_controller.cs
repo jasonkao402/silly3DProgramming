@@ -15,6 +15,7 @@ public class player_controller : MonoBehaviour
     public Vector3 walkParam = new Vector3(4f, 2.0f, 0.2f);
     public Animator animationcontroller;
     bool isSprinting = false, IsClicking = false;
+    int groundDet = 0;
     // float velocity = 0f;
     public void OnMovement(InputAction.CallbackContext context)
     {
@@ -31,7 +32,7 @@ public class player_controller : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && jumpCDTimer < 0f)
+        if (context.performed && jumpCDTimer < 0f && groundDet > 0)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
             animationcontroller.SetFloat("jumpCD", 1f);
@@ -80,10 +81,14 @@ public class player_controller : MonoBehaviour
         if (other.CompareTag("Ground"))
         {
             animationcontroller.SetFloat("jumpCD", 0f);
+            groundDet++;
         }
     }
     void OnTriggerExit(Collider other)
     {
-        
+        if (other.CompareTag("Ground"))
+        {
+            groundDet--;
+        }
     }
 }
