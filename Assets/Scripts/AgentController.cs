@@ -39,6 +39,7 @@ public class AgentController : MonoBehaviour
     private float pathUpdateTimer = 0f;
     // Object pool for path markers
     private Queue<GameObject> markerPool = new Queue<GameObject>();
+    public Animator animationcontroller;
 
     // Use this for initialization
     void Start()
@@ -48,8 +49,8 @@ public class AgentController : MonoBehaviour
 
         // Disable the agent's automatic movement and rotation
         // We will only use it for path calculation.
-        agent.updatePosition = false;
-        agent.updateRotation = false;
+        // agent.updatePosition = false;
+        // agent.updateRotation = false;
 
         if (agent == null)
         {
@@ -66,6 +67,8 @@ public class AgentController : MonoBehaviour
         {
             // Calculate the path to the target's current position
             agent.SetDestination(target.position);
+             // Update the visual path markers
+            UpdatePathVisualization();
             // Reset the timer
             pathUpdateTimer = 0f;
         }
@@ -87,8 +90,14 @@ public class AgentController : MonoBehaviour
             nextCheckpoint = agent.pathEndPosition;
         }
 
-        // Update the visual path markers
-        UpdatePathVisualization();
+    }
+
+    void FixedUpdate()
+    {
+        // Map the velocity to the animation parameters
+        // We dont actuall move sideways, so we only care about forward speed.
+        // animationcontroller.SetFloat("x_velocity", velocity.x);
+        animationcontroller.SetFloat("z_velocity", agent.velocity.magnitude);
     }
 
     /// <summary>
