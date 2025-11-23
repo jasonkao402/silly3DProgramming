@@ -97,6 +97,7 @@ public class AgentController : MonoBehaviour
         // Map the velocity to the animation parameters
         // We dont actuall move sideways, so we only care about forward speed.
         // animationcontroller.SetFloat("x_velocity", velocity.x);
+        if (animationcontroller == null) return;
         animationcontroller.SetFloat("z_velocity", agent.velocity.magnitude);
     }
 

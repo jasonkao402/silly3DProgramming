@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 public class player_controller : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,6 +18,9 @@ public class player_controller : MonoBehaviour
     bool isSprinting = false, IsClicking = false;
     int groundDet = 0;
     // float velocity = 0f;
+
+    public SwordHitControl swordHitControl;
+    public float attackTimeWindow = 0.3f;
     public void OnMovement(InputAction.CallbackContext context)
     {
         targetMovement = context.ReadValue<Vector2>();
@@ -29,6 +33,14 @@ public class player_controller : MonoBehaviour
     {
         IsClicking = context.ReadValueAsButton();
         animationcontroller.SetBool("isAtk", IsClicking);
+    }
+    IEnumerator AttackCoroutine()
+    {
+        swordHitControl.isAttacking = true;
+        yield return new WaitForSeconds(attackTimeWindow * 0.5f);
+        swordHitControl.ApplyRepellingForce();
+        yield return new WaitForSeconds(attackTimeWindow * 0.5f);
+        swordHitControl.isAttacking = false;
     }
     public void OnJump(InputAction.CallbackContext context)
     {
@@ -74,6 +86,10 @@ public class player_controller : MonoBehaviour
             {
                 animationcontroller.SetFloat("jumpCD", 0f);
             }
+        }
+        if (!swordHitControl.isAttacking && IsClicking)
+        {
+            StartCoroutine(AttackCoroutine());
         }
     }
     void OnTriggerEnter(Collider other)
