@@ -26,6 +26,7 @@ public class BaseEntity : MonoBehaviour
         else if (amount < 0)
         {
             OnHit();
+            DamageTextSpawner.Instance.ShowDamage(-amount, transform.position);
         }
         _statsManager.currentHealth += amount;
         if (_statsManager.currentHealth > _statsManager.maxHealth)
